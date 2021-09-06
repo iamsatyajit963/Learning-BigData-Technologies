@@ -55,10 +55,10 @@ Hbase table is divided into rows, columns families, columns and cells.
 ***Columns*** -> fields of the table
 ***Cell*** -> actual value/data
 
-##Some fundamentals about Hadoop which helps us understand HBase more clearly.
+## Some fundamentals about Hadoop which helps us understand HBase more clearly.
 
 Hadoop is the underlying technology of HBase.
-####Features of Hadoop:
+#### Features of Hadoop:
 * High availability
 * Fault Tolerance
 * Distribution
@@ -66,14 +66,14 @@ Hadoop is the underlying technology of HBase.
 * HDFS(for large-scale storage with high throughput on R/W operations, rapid data access)
 * YARN(for job scheduling, and job and resource management)
 
-####[Core Daemons](https://www.geeksforgeeks.org/hadoop-daemons-and-their-features/) if Hadoop:  
+#### [Core Daemons](https://www.geeksforgeeks.org/hadoop-daemons-and-their-features/) if Hadoop:  
 * **NameNode** -> ***Master*** -> Single POC which manages all metadata about the data present on the cluster
 * **DataNode** -> ***Slave*** -> Contains actual data
 * **Jobtracker**/**ResouceManager** -> Runs on NameNode, performs MR jobs
 * **Secondary NameNode** ->Maintains backups of NameNode
 * **TaskTracker**/**NodeManager** -> Performs the tasks
 
-####Comparing HBase with Hadoop
+#### Comparing HBase with Hadoop
 |Hadoop/HDFS |  HBase |
 | ------------------------------------------------| -------------------------------------------------- |
 |This provide file system for distributed storage | This provides tabular column-oriented data storage
@@ -82,7 +82,7 @@ Hadoop is the underlying technology of HBase.
 | The data model is not flexible Provides a flexible data model |This uses file system and processing framework This uses tabular storage with built-in Hadoop MapReduce support
 |This is mostly optimized for write-once read-many | This is optimized for both read/write many|
 
-####Comparing functional differences between RDBMs and HBase
+#### Comparing functional differences between RDBMs and HBase
 |Relational database |HBase|
 | ------------------------------------------------| -------------------------------------------------- |
 | This supports scale up. In other words,when more disk and memory processing power is needed, we need to upgrade it to a more powerful server. | This supports scale out. In other words, when more disk and memory processing power is needed, we need not upgrade the server. However, we need to add new servers to the cluster.|
