@@ -4,7 +4,7 @@
 Hbase is a column-based database that runs on top of Hadoop distributed filesystem and supports features such as linear scalability(scale out), automatic failover, automatic sharding, and more flexible schema.
 
 ### HBase layout on top of Hadoop
-![HBase-layout-on-top-of-Hadoop.png](./Resources/HBase layout on top of Hadoop.PNG)
+![HBase-layout-on-top-of-Hadoop.png](./Resources/HBase-layout-on-top-of-Hadoop.PNG)
 
 Hbase can be seen as **master-slave** database.
 * Master = HMaster (responsible for coordination between client application and HRegionserver.)
