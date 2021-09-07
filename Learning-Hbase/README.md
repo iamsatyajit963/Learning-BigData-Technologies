@@ -51,9 +51,13 @@ When there was a need to store structured data (data in the form of tables, rows
 Hbase table is divided into rows, columns families, columns and cells.
 
 ***Row Keys*** -> uniquely identify a row
+
 ***Column Families*** -> Group of columns
+
 ***Columns*** -> fields of the table
+
 ***Cell*** -> actual value/data
+
 
 ## Some fundamentals about Hadoop which helps us understand HBase more clearly.
 
@@ -96,3 +100,14 @@ Hadoop is the underlying technology of HBase.
 | This mostly guarantees transaction integrity. | There is no transaction guaranty in HBase.| 
 | This supports JOINs. | This does not support JOINs.|
 | This supports referential integrity. |There is no in-built support for referential integrity.|
+
+#### Why and how Column Based approach is the best choice
+Let's understand this by taking one example:
+
+If one row occupies a page, and we need all specific column such as _salary_ or _rate of interest_ from all the rows for some kind of analytics, each page containing the columns has to be brought in the memory;so this page in and page out will result in a lot of I/O, which may result prolonged processing time.
+
+In column-oriented databases, each column will be stored in pages. If we need to fetch a specific column, there will be less I/O as only the pages that contain the specified column needed t be brought in main memory and read, and we need not bring and read all the pages containing rows/records henceforth into the memory. That's why Column oriented approach.
+
+### Internal architecture of HBase
+HBase stores file using **LSM-tree**, which maintains data in two separate parts that are optimized for underlying storage. This type of data structure depends on two structures, a current and smaller one in memory and a bigger one on the persistent disk, and once the part in memory becomes bigger than a certain limit, it is merged with the bigger structure that is stored on the disk using a merge sort algorithm and a new in-memory tree is created for newer insert requests. It transforms random data access into sequential data access, which improves read performance, and merging is a background process, which does not affect the foreground processing.
+
