@@ -10,7 +10,7 @@ Hbase can be seen as **master-slave** database.
 * Master = HMaster (responsible for coordination between client application and HRegionserver.)
 * Slave(s) = HRegionsevers(which serve the actual tables in th form of regions.)
 
-### Comparing architectural differences between RDBMs and HBase
+### Comparing **_architectural_** differences between RDBMs and HBase
 | Relational databases     | HBase          |
 | ------------------------------------------------| -------------------------------------------------- |
 | Uses tables as databases                        | Uses regions as databases|
@@ -86,7 +86,7 @@ Hadoop is the underlying technology of HBase.
 | The data model is not flexible Provides a flexible data model |This uses file system and processing framework This uses tabular storage with built-in Hadoop MapReduce support
 |This is mostly optimized for write-once read-many | This is optimized for both read/write many|
 
-#### Comparing functional differences between RDBMs and HBase
+#### Comparing _**functional**_ differences between RDBMs and HBase
 |Relational database |HBase|
 | ------------------------------------------------| -------------------------------------------------- |
 | This supports scale up. In other words,when more disk and memory processing power is needed, we need to upgrade it to a more powerful server. | This supports scale out. In other words, when more disk and memory processing power is needed, we need not upgrade the server. However, we need to add new servers to the cluster.|
@@ -111,3 +111,65 @@ In column-oriented databases, each column will be stored in pages. If we need to
 ### Internal architecture of HBase
 HBase stores file using **LSM-tree**, which maintains data in two separate parts that are optimized for underlying storage. This type of data structure depends on two structures, a current and smaller one in memory and a bigger one on the persistent disk, and once the part in memory becomes bigger than a certain limit, it is merged with the bigger structure that is stored on the disk using a merge sort algorithm and a new in-memory tree is created for newer insert requests. It transforms random data access into sequential data access, which improves read performance, and merging is a background process, which does not affect the foreground processing.
 
+### An overview on HBase's components and functionalities
+* Zookeeper 
+  * A centralized service for providing configuration information, naming, synchronization and group services over large clusters in distributed systems.
+* HMaster 
+  * Acts as Master in master-slave architecture
+  * Monitors RegionServers
+  * Handles RegionServers failover.
+  * Handles metadata changes.
+  * Assignment/unassignment of regions.
+  * Interface all metadata changes.
+  * Performs reload balancing in idle time.
+  * It publishes its location to client using Zookeeper.
+  * HMaster Web UI provides all the information about HBase cluster(table, regions, RegionServers adn so on).
+  * There may be one or many HMaster(many for High Availability in case or hazard).
+* RegionServer
+  * Acts as Slave(s) in master-slave architecture.
+  * Serving Regions(tables) assign to it by HMaster.
+  * Handling client R/W requests.
+  * Maintaining Hlogs.
+  * Performing Compaction(merge).
+  * Responsible for handling region splits.
+* Client
+  * Responsible for finding the RegionServer which is hosting a particular ros(data/record).
+* Catalog tables
+  * Contains all the info about all the RegionServers and Regions.
+
+#### When to choose HBase and when not!!!
+When to:
+* If data needs to have a dynamic or variable schema
+* If a number of columns contain more null values (blank columns)When we have a huge number of dynamic rows
+* If our data contains a variable number of columns
+* If we need to maintain versions of data
+* If high scalability is needed
+* If we need in-built compression on records
+* If a high volume of I/O is needed
+
+When NOT:
+* When data is not in large amounts (in TBs and more)
+* When JOINs and relational DB features are needed
+* Don't go with the belief "every one is using it"
+* If RDBMS fits your requirements, use RDBMS
+
+### PROs ans CONs of HBase
+**Pros**:
+* Great for analytics in association with Hadoop MapReduce
+* It can handle very large volumes of data
+* Supports scaling out in coordination with Hadoop file system even on commodity hardware
+* Fault tolerance
+* License free
+* Very flexible on schema design/no fixed schema
+* Can be integrated with Hive for SQL-like queries, which is better for DBAs who are more familiar with SQL queries
+* Auto-sharding
+* Auto failover
+* Simple client interface
+* Row-level atomicity, that is, the PUT operation will either write or fail
+
+**Cons**:
+* Single point of failure (when only one HMaster is used)
+* No transaction support
+* JOINs are handled in MapReduce layer rather than the database itself
+* Indexed and sorted only on key, but RDBMS can be indexed on some arbitrary field
+* No built-in authentication or permissions
